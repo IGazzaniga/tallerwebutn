@@ -1,11 +1,6 @@
 <?php
-#session_start();
-
-#print_r($_SERVER);
-
-#print_r($_REQUEST['nombre']);
-#exit;
-
+session_start();
+session_destroy();
 $enlace = false;
 function Conectarse()
 {
@@ -25,26 +20,30 @@ function Desconectarse()
     $enlace = false;
 }
 
-$res = mysql_query("SELECT * from usuario where login='".$_GET['login']."' and pass='".md5($_GET['pass'])."'", Conectarse() );
+$res = mysql_query("SELECT * from usuario where login='".$_POST['username']."' and pass='".md5($_POST['password'])."'", Conectarse() );
 #$res = mysql_query("SELECT * from usuario", Conectarse() );
 Desconectarse();
 if (!$res) {
+  http_response_code (500);
     echo "No se pudo ejecutar con exito la consulta ($sql) en la BD: " . mysql_error();
     exit;
 }
 
 if (mysql_num_rows($res) == 0) {
-    echo "No se han encontrado filas, nada a imprimir, asi que voy a detenerme.";
+  http_response_code (401);
+    echo "Error de usuario o contraseña.";
     exit;
 }
 
-while($fila = mysql_fetch_assoc($res)) {
-  print_r($fila);
-}
-
+//Inicia la sesion
 /*
-if(isset($_GET)) {
-    mysql_query("INSERT INTO usuario (login, pass, nombre) VALUES ('".$_GET['login']."','".md5($_GET['pass'])."','".$_GET['nombre']."')", Conectarse() );
+$ip = $_SERVER['REMOTE_ADDR']; // the IP address to query
+$query = @unserialize(file_get_contents('http://ip-api.com/php/'.$ip));
+if($query && $query['status'] == 'success') {
+  echo 'Hello visitor from '.$query['country'].', '.$query['city'].'!';
+} else {
+  echo 'Unable to get location';
 }
-Desconectarse();
 */
+$usuario = mysql_fetch_assoc($res);
+$_SESSION['username'] = $usuario['login'];

@@ -1,6 +1,5 @@
 <?php
-echo json_encode($_POST);
-exit;
+
     require 'gmail.php';
     $captcha = "";
     if (isset($_POST["g-recaptcha-response"]))

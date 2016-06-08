@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html >
+  <head>
+    <meta charset="UTF-8">
+    <title>Entidades</title>
+
+
+
+    <link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.0/css/materialize.min.css'>
+<link rel='stylesheet prefetch' href='https://fonts.googleapis.com/icon?family=Material+Icons'>
+
+        <link rel="stylesheet" href="css/sortable_datatable.css">
+
+  </head>
+
+  <body>
+
+    <div class="row">
+  <div id="admin" class="col s12">
+    <div class="card material-table">
+      <div class="table-header">
+        <span class="table-title">Entidades</span>
+        <div class="actions">
+          <a onclick="$('#modal1').openModal();" class="modal-trigger waves-effect btn-flat nopadding"><i class="material-icons">add</i></a>
+          <a href="#" class="search-toggle waves-effect btn-flat nopadding"><i class="material-icons">search</i></a>
+        </div>
+      </div>
+      <table id="entidades">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Position</th>
+            <th>Office</th>
+            <th>Age</th>
+            <th>Start date</th>
+            <th>Salary</th>
+          </tr>
+        </thead>
+
+      </table>
+    </div>
+  </div>
+</div>
+
+   <!-- Modal Structure -->
+   <div id="modal1" class="modal modal-fixed-footer">
+     <form class="" >
+       <div class="modal-content">
+         <h4>Nueva Entidad</h4>
+           <div class="input-field col s6">
+            <input id="first_name" type="text" class="validate">
+            <label for="first_name">First Name</label>
+          </div>
+          <div class="input-field col s6">
+            <input id="last_name" type="text" class="validate">
+            <label for="last_name">Last Name</label>
+          </div>
+          <div class="input-field col s6">
+            <input id="documento" type="number" class="validate">
+            <label for="documento">Documento</label>
+          </div>
+          <div class="input-field col s6">
+            <input id="legajo" type="number" class="validate">
+            <label for="legajo">Legajo</label>
+          </div>
+          <p class="range-field">
+          <label for="horas">Horas Trabajadas</label>
+            <input type="range" id="horas" min="0" max="8" />
+          </p>
+          <div class="input-field col s6">
+            <label for="fecha_ingreso">Fecha de ingreso</label>
+            <input type="date" class="datepicker" id="fecha_ingreso">
+          </div>
+       </div>
+       <div class="modal-footer">
+         <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat ">Cancelar</a>
+         <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat ">Aceptar</a>
+
+       </div>
+     </form>
+
+   </div>
+
+
+    <script src='js/jquery.min.js'></script>
+<script src='js/jquery.dataTables.min.js'></script>
+<script src='js/materialize.min.js'></script>
+
+        <script src="js/sortable_datatable.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function() {
+  $('#entidades').DataTable( {
+    "oLanguage": {
+      "sStripClasses": "",
+      "sSearch": "",
+      "sSearchPlaceholder": "Que desea buscar",
+      "sInfo": "_START_ -_END_ de _TOTAL_",
+      "sLengthMenu": '<span>Filas por pagina:</span><select class="browser-default">' +
+        '<option value="10">10</option>' +
+        '<option value="20">20</option>' +
+        '<option value="30">30</option>' +
+        '<option value="40">40</option>' +
+        '<option value="50">50</option>' +
+        '<option value="-1">Todas</option>' +
+        '</select></div>'
+    },
+    bAutoWidth: false,
+      "ajax": "objects.json",
+      "columns": [
+          { "data": "name" },
+          { "data": "position" },
+          { "data": "office" },
+          { "data": "extn" },
+          { "data": "start_date" },
+          { "data": "salary" }
+      ]
+  } );
+} );
+
+$('.datepicker').pickadate({
+   selectMonths: true, // Creates a dropdown to control month
+ });
+
+</script>
+  </body>
+</html>
