@@ -4,17 +4,12 @@
     <meta charset="UTF-8">
     <title>Entidades</title>
 
-
-
     <link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.0/css/materialize.min.css'>
 <link rel='stylesheet prefetch' href='https://fonts.googleapis.com/icon?family=Material+Icons'>
 
         <link rel="stylesheet" href="css/sortable_datatable.css">
-
   </head>
-
   <body>
-
     <div class="row">
   <div id="admin" class="col s12">
     <div class="card material-table">
@@ -28,12 +23,11 @@
       <table id="entidades">
         <thead>
           <tr>
-            <th>Name</th>
-            <th>Position</th>
-            <th>Office</th>
-            <th>Age</th>
-            <th>Start date</th>
-            <th>Salary</th>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>Documento</th>
+            <th>Legajo</th>
+            <th>Fecha Ingreso</th>
           </tr>
         </thead>
 
@@ -44,37 +38,37 @@
 
    <!-- Modal Structure -->
    <div id="modal1" class="modal modal-fixed-footer">
-     <form class="" >
+     <form class="" id="nuevo_personal">
        <div class="modal-content">
          <h4>Nueva Entidad</h4>
            <div class="input-field col s6">
-            <input id="first_name" type="text" class="validate">
-            <label for="first_name">First Name</label>
+            <input id="first_name" name="first_name" type="text" class="validate">
+            <label for="first_name">Nombre</label>
           </div>
           <div class="input-field col s6">
-            <input id="last_name" type="text" class="validate">
-            <label for="last_name">Last Name</label>
+            <input id="last_name" name="last_name" type="text" class="validate">
+            <label for="last_name">Apellido</label>
           </div>
           <div class="input-field col s6">
-            <input id="documento" type="number" class="validate">
+            <input id="documento" name="documento" type="number" class="validate">
             <label for="documento">Documento</label>
           </div>
           <div class="input-field col s6">
-            <input id="legajo" type="number" class="validate">
+            <input id="legajo"  name="legajo" type="number" class="validate">
             <label for="legajo">Legajo</label>
           </div>
           <p class="range-field">
           <label for="horas">Horas Trabajadas</label>
-            <input type="range" id="horas" min="0" max="8" />
+            <input type="range" id="horas" name="horas" min="0" max="8" />
           </p>
           <div class="input-field col s6">
             <label for="fecha_ingreso">Fecha de ingreso</label>
-            <input type="date" class="datepicker" id="fecha_ingreso">
+            <input type="date" class="datepicker" id="fecha_ingreso" name="fecha_ingreso">
           </div>
        </div>
        <div class="modal-footer">
          <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat ">Cancelar</a>
-         <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat ">Aceptar</a>
+         <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat " onclick="altaPersonal()">Aceptar</a>
 
        </div>
      </form>
@@ -106,22 +100,46 @@ $(document).ready(function() {
         '</select></div>'
     },
     bAutoWidth: false,
-      "ajax": "objects.json",
+      "ajax": "personal_json.php",
       "columns": [
-          { "data": "name" },
-          { "data": "position" },
-          { "data": "office" },
-          { "data": "extn" },
-          { "data": "start_date" },
-          { "data": "salary" }
+          { "data": "nombre" },
+          { "data": "apellido" },
+          { "data": "documento" },
+          { "data": "legajo" },
+          { "data": "fh_ingreso" }
       ]
   } );
 } );
 
 $('.datepicker').pickadate({
    selectMonths: true, // Creates a dropdown to control month
+   format: 'yyyy-mm-dd'
  });
+$.get('personal_json.php',function(d) {console.log(d);});
+function altaPersonal() {
+  //$('#preloader').show();
+  $.ajax({
+    url:"alta_personal.php",
+    type:"POST",
+    data:$('form#nuevo_personal').serializeArray(),
+    success: done,
+    error: error
+  });
+  function done(dato){
+    console.log(dato);
+    $('form#nuevo_personal')[0].reset();
+    var table = $('#entidades').dataTable();
+      table.fnReloadAjax();
+    //$('#preloader').hide();
+  };
+  function error(dato){
+    console.log(dato);
 
+    $('#resultLogin').html(dato.responseText);
+    //$('#preloader').hide();
+  };
+}
 </script>
+<script type="text/javascript" src='//cdn.datatables.net/plug-ins/1.10.11/api/fnReloadAjax.js'></script>
   </body>
 </html>
